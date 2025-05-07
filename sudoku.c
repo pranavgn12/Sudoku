@@ -1,7 +1,6 @@
 #include <conio.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
 #include <time.h>
 #include <windows.h>
 struct a {
@@ -11,7 +10,7 @@ struct q {
 	unsigned int n : 7;
 };
 void dis();
-void mp();
+void mp();  //Calculates cell number based on mouse postion in grid
 UINT originalCP;
 DWORD mode, written;
 POINT cursorPos;
@@ -24,23 +23,8 @@ RECT consoleRect;
 CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
 WORD saved_attributes;
 int cond;
-// Get current attributes
-int windowWidth;
-int windowHeight;
-// Get screen dimensions
-int screenWidth;
-int screenHeight;
-
-// Calculate the top-left coordinates for centering the window
-int x;
-int q;
-
-// Reposition the window to the center of the screen
-// SetWindowPos(consoleWnd, NULL, x, q, 0, 0, SWP_NOZORDER | SWP_NOSIZE);*/
-struct a c[81]; //={1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9};
-// struct a e;
-
-struct a p[81];
+struct a c[81]; //stores generated grid
+struct a p[81]; //stores which cell is writable and written value. If p[i].n== 10 represents its writable & blank,  if it has value less than 10 then it is the value wrote to cell and if it has value 11 then its non writable.
 struct timespec spec;
 long tm;
 struct q hid = { 30 };
@@ -697,9 +681,6 @@ m:
 		printf("zoom not set");
 	width = 24;
 	height = 14;
-	bufferSize.X = width;
-	bufferSize.Y = height;
-	//SetConsoleScreenBufferSize(hConsole, bufferSize);
 	windowSize.Left = 0;
 	windowSize.Top = 0;
 	windowSize.Right = width - 1;
@@ -709,12 +690,6 @@ m:
 	if (!GetWindowRect(consoleWnd, &consoleRect)) {
 		fprintf(stderr, "Error: Unable to get window rectangle.\n");
 	}
-	windowWidth = consoleRect.right - consoleRect.left;
-	windowHeight = consoleRect.bottom - consoleRect.top;
-	screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	screenHeight = GetSystemMetrics(SM_CYSCREEN);
-	x = (screenWidth - windowWidth) / 2;
-	q = (screenHeight - windowHeight) / 2;
 	pch = 100;
 	while (1) {
 		if (GetCursorPos(&cursorPos)) {
@@ -1026,6 +1001,9 @@ m:
 	}
 cho:
 	while ((GetAsyncKeyState(VK_LBUTTON) & 0x8000));
+	
+	//Sudoku generation
+	
 ch1:
 	system("cls");
 	printf("\n");
@@ -1279,6 +1257,7 @@ ch0: t2 = time(NULL);
 			goto m;
 		}
 	}
+		
 ch4: while (GetAsyncKeyState(VK_LBUTTON) & 0x8000);
 	i.n = 0;
 	m.n = 0;
@@ -1286,22 +1265,10 @@ ch4: while (GetAsyncKeyState(VK_LBUTTON) & 0x8000);
 	SetConsoleOutputCP(CP_UTF8);
 	cfi.dwFontSize.Y = 32;
 	cfi.dwFontSize.X = 16;
-	//bufferSize.X =width;
-	//bufferSize.Y = height;
-	windowSize.Left = 0;
-	windowSize.Top = 0;
-	windowSize.Right = width - 1;
-	windowSize.Bottom = height - 1;
-	//SetConsoleScreenBufferSize(hConsole, bufferSize);
 	if (!SetCurrentConsoleFontEx(hConsole, FALSE, &cfi))
 		printf("zoom not set");
-	//  if(!SetConsoleWindowInfo(hConsole, TRUE, &windowSize)) printf("Failed to
-	 // set console window size.\n");
 	width = 34;
 	height = 16;
-	/*bufferSize.X = width;
-	bufferSize.Y = height;
-	SetConsoleScreenBufferSize(hConsole, bufferSize);*/
 	windowSize.Left = 0;
 	windowSize.Top = 0;
 	windowSize.Right = width - 1;
@@ -1317,7 +1284,6 @@ ch4: while (GetAsyncKeyState(VK_LBUTTON) & 0x8000);
 	SetConsoleOutputCP(CP_UTF8);
 	cfi.dwFontSize.Y = 32;
 	cfi.dwFontSize.X = 16;
-	//GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
 	saved_attributes = consoleInfo.wAttributes;
 	if (!SetCurrentConsoleFontEx(hConsole, FALSE, &cfi))
 		printf("zoom not set");
@@ -1378,6 +1344,12 @@ ch4: while (GetAsyncKeyState(VK_LBUTTON) & 0x8000);
 					for (y.n = 1; y.n < 10; y.n++)
 						g[y.n - 1].n = y.n;
 					//printf("\n");
+					
+					
+					// Sudoku solving
+
+					
+					
 					for (m.n = 0; m.n < 81; m.n++) {
 						//printf("%d ",m.n);
 						//getch();
