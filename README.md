@@ -1,5 +1,4 @@
 # Sudoku
-This is a Sudoku game made in C using the Windows API. It has a GUI, and you can play Sudoku or use it to solve puzzles. It runs in the Windows command prompt.
-The Sudoku solver finds one solution.
+This is a Sudoku game made in C using the Windows API. It has a GUI, and you can play Sudoku or use it to solve puzzles. The Sudoku solver finds one solution. It runs in the Windows command prompt.
 
-Compile by running batch file, Then run launcher.exe to play Or compile sudoku.c and run it in old windows cmd known as "conhost.exe" at location "C:\Windows\System32\conhost.exe" not newer terminal.
+Compile by running the batch file, then run launcher.exe to play. Alternatively, compile sudoku.c and run it using the old Windows CMD, known as conhost.exe, located at C:\Windows\System32\conhost.exe, not the newer terminal.
